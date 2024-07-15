@@ -1,6 +1,15 @@
-let firstNumber = 12;
-let secondNumber = 3;
-let operator = "/";
+let displayValue = 0;
+let firstNumber = 0;
+let secondNumber = 0;
+let operator = "";
+
+let input = document.querySelector(".currentOperand");
+let buttons = document.querySelectorAll("button");
+buttons.forEach((button) => {
+  button.addEventListener("click", (e) => {
+    input.innerHTML = button.innerHTML;
+  });
+});
 
 function operate(a, b, operation) {
   switch (operation) {
@@ -30,5 +39,3 @@ function multiply(a, b) {
 function divide(a, b) {
   return a / b;
 }
-
-console.log(operate(firstNumber, secondNumber, "/"));
