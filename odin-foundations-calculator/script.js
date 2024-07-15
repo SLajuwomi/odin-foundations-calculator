@@ -1,15 +1,32 @@
 let displayValue = 0;
-let firstNumber = 0;
+let firstNumber = null;
 let secondNumber = 0;
 let operator = "";
 
-let input = document.querySelector(".currentOperand");
+let input = document.getElementById("current-operand");
 let buttons = document.querySelectorAll("button");
 buttons.forEach((button) => {
   button.addEventListener("click", (e) => {
-    input.innerHTML = button.innerHTML;
+    inputNumber(button.innerHTML);
+    updateDisplay();
   });
 });
+
+function inputNumber(number) {
+  if (firstNumber === null) {
+    if (displayValue === "0" || displayValue === 0) {
+      displayValue = number;
+    } else if (displayValue === firstNumber) {
+      displayValue = number;
+    } else {
+      displayValue += number;
+    }
+  }
+}
+
+function updateDisplay() {
+  input.innerText = displayValue;
+}
 
 function operate(a, b, operation) {
   switch (operation) {
