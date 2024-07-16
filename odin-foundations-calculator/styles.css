@@ -10,7 +10,7 @@ body {
   margin: 0;
   /* first color is the one of the left
   second is the one on the right */
-  background: linear-gradient(to right, #00aaff, #00ff6c);
+  background: linear-gradient(to right, #2e3192, #1bffff);
 }
 
 .calculator-grid {
@@ -29,13 +29,15 @@ body {
 .calculator-grid > button {
   cursor: pointer;
   font-size: 2rem;
-  border: 1px solid white;
   outline: none;
-  background-color: rgba(255, 255, 255, 0.75);
+  background-color: rgba(34, 34, 34, 0.75);
+  border-radius: 15px;
+  height: 75px;
 }
 
 .calculator-grid > button:hover {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(63, 63, 63, 0.9);
+  transform: scale(1.1);
 }
 
 .span-two {
@@ -54,6 +56,8 @@ body {
   /* allows line break in the middle of a word */
   word-wrap: break-word;
   word-break: break-all;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
 
 .output #previous-operand {
