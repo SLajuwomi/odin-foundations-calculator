@@ -1,58 +1,116 @@
-let displayValue = 0;
-let firstNumber = null;
-let secondNumber = 0;
-let operator = "";
+const previousOperandSelector = document.querySelector(
+  "[data-previous-operand]"
+);
+const currentOperandSelector = document.querySelector("[data-current-operand]");
+const clearButton = document.querySelector("[data-clear]");
+const deleteButton = document.querySelector("[data-delete]");
+const equalButton = document.querySelector("[data-equals]");
+const numbers = document.querySelectorAll("[data-number]");
+const operations = document.querySelectorAll("[data-operation]");
 
-let input = document.getElementById("current-operand");
-let buttons = document.querySelectorAll("button");
-buttons.forEach((button) => {
-  button.addEventListener("click", (e) => {
-    inputNumber(button.innerHTML);
-    updateDisplay();
-  });
-});
+class Calculator {
+  constructor(previousOperandSelector, currentOperandSelector) {
+    this.previousOperandSelector = previousOperandSelector;
+    this.currentOperandSelector = currentOperandSelector;
+    this.clear();
+  }
 
-function inputNumber(number) {
-  if (firstNumber === null) {
-    if (displayValue === "0" || displayValue === 0) {
-      displayValue = number;
-    } else if (displayValue === firstNumber) {
-      displayValue = number;
-    } else {
-      displayValue += number;
+  clear() {
+    this.currentOperand = "";
+    this.previousOperand = "";
+    this.operation = undefined;
+  }
+
+  delete() {
+    this.currentOperand = this.currentOperand.toString().slice(0, -1);
+  }
+
+  appendNumber(number) {
+    if (number === "." && this.currentOperand.includes(".")) return;
+    this.currentOperand = this.currentOperand.toString() + number.toString();
+  }
+
+  chooseOperation(operation) {
+    if (this.currentOperand === "") return;
+    if (this.previousOperand !== "") {
+      this.compute();
+    }
+    this.operation = operation;
+    this.previousOperand = this.currentOperand;
+    this.currentOperand = "";
+  }
+
+  compute() {
+    let computation;
+    const prev = parseFloat(this.previousOperand);
+    const current = parseFloat(this.currentOperand);
+
+    if (isNaN(prev) || isNaN(current)) return;
+
+    switch (this.operation) {
+      case "+":
+        computation = prev + current;
+        break;
+      case "-":
+        computation = prev - current;
+        break;
+      case "*":
+        computation = prev * current;
+        break;
+      case "÷":
+        computation = prev / current;
+        break;
+      default:
+        return;
+    }
+
+    this.currentOperand = computation;
+    this.operation = undefined;
+    this.previousOperand = "";
+  }
+
+  getDisplayNumber(number) {
+    return number;
+  }
+
+  updateDisplay() {
+    this.currentOperandSelector.innerText = this.currentOperand;
+    if (this.operation != null) {
+      this.previousOperandSelector.innerText = `${this.previousOperand} ${this.operation}`;
     }
   }
 }
 
-function updateDisplay() {
-  input.innerText = displayValue;
-}
+const calculator = new Calculator(
+  previousOperandSelector,
+  currentOperandSelector
+);
 
-function operate(a, b, operation) {
-  switch (operation) {
-    case "+":
-      return add(a, b);
-    case "-":
-      return subtract(a, b);
-    case "*":
-      return multiply(a, b);
-    case "/":
-      return divide(a, b);
-  }
-}
+numbers.forEach((number) => {
+  number.addEventListener("click", () => {
+    calculator.appendNumber(number.innerHTML);
+    calculator.updateDisplay();
+  });
+});
 
-function add(a, b) {
-  return a + b;
-}
+operations.forEach((operation) => {
+  operation.addEventListener("click", () => {
+    calculator.chooseOperation(operation.innerHTML);
+    calculator.updateDisplay();
+  });
+});
 
-function subtract(a, b) {
-  return a - b;
-}
+equalButton.addEventListener("click", () => {
+  calculator.compute();
+  calculator.updateDisplay();
+});
 
-function multiply(a, b) {
-  return a * b;
-}
+clearButton.addEventListener("click", () => {
+  calculator.clear();
+  calculator.updateDisplay();
+});
 
-function divide(a, b) {
-  return a / b;
-}
+deleteButton.addEventListener("click", () => {
+  calculator.delete();
+  calculator.updateDisplay();
+});
